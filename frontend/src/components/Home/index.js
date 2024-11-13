@@ -52,6 +52,33 @@ class Home extends Component {
     }
   };
 
+
+
+  handleDeleteTodo = async (todoId) => {
+    const { user } = this.state;
+  
+    try {
+      const response = await fetch(`https://oscowl-todo.onrender.com/todos`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user}`,
+        },
+        body: JSON.stringify({todoId:todoId})
+      });
+  
+      if (response.ok) {
+        this.setState({ message: 'Todo deleted successfully!' });
+        this.fetchTodos(); // Refresh the todo list after deletion
+      } else {
+        this.setState({ message: 'Failed to delete todo.' });
+      }
+    } catch (error) {
+      console.error('Error deleting todo:', error);
+      this.setState({ message: 'An error occurred while deleting the todo.' });
+    }
+  };
+
   handleAddTodo = async () => {
     const { todoTitle, todoDescription, user } = this.state;
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for programmatic navigation
 import { CgProfile } from "react-icons/cg";
-
 import './index.css'; // Ensure you have appropriate CSS for styling the popup
 
 const Profile = () => {
@@ -13,6 +12,7 @@ const Profile = () => {
   const [updateUsername, setUpdateUsername] = useState('');
   const [updateEmail, setUpdateEmail] = useState('');
   const [updatePassword, setUpdatePassword] = useState('');
+  const navigate = useNavigate(); // Initialize useNavigate for redirection
 
   const getProfileData = async () => {
     try {
@@ -81,6 +81,14 @@ const Profile = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Remove the JWT token from cookies
+    Cookies.remove('jwtToken');
+    
+    // Redirect to the login page
+    navigate('/login');
+  };
+
   useEffect(() => {
     getProfileData();
   }, []);
@@ -105,6 +113,7 @@ const Profile = () => {
           <button className="home-btn">
             <Link to='/' className='link-to-home'>Go to Home</Link>
           </button>
+          <button onClick={handleLogout}>Logout</button> {/* Logout button */}
         </div>
       ) : (
         <p>No profile data found.</p>
@@ -156,4 +165,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
